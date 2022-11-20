@@ -1,0 +1,3 @@
+mongo_uri: "mongodb+srv://DatPham:DatPham@cluster0.cs9dq.mongodb.net/?retryWrites=true&w=majority"
+db_name: "realworld_database"
+jwt_secret: "my-secret-key"
