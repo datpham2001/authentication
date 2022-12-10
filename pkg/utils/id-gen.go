@@ -1,5 +1,9 @@
 package utils
 
+import (
+	gonanoid "github.com/matoous/go-nanoid/v2"
+)
+
 const (
 	ACCOUNT = "ACCOUNT"
 
@@ -10,4 +14,20 @@ const (
 
 func GenNanoID(alphabet string, length int) string {
 	res, err := gonanoid.Generate(alphabet, length)
+	if err != nil {
+		return ""
+	}
+
+	return res
+}
+
+func GenID(modelName string) string {
+	var genResult string
+
+	switch modelName {
+	case ACCOUNT:
+		genResult = "ACC" + GenNanoID(STRING_TO_GEN_ID, ACCOUNT_LENGTH)
+	}
+
+	return genResult
 }

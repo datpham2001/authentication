@@ -39,6 +39,6 @@ func ConnectDB() {
 			log.Fatal(dbErr)
 		}
 
-		fmt.Println("Connected to MongoDB sucessfully")
+		fmt.Println("Connected to MongoDB successfully")
 	})
 }

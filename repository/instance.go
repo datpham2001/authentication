@@ -1,4 +1,4 @@
-package dao
+package repository
 
 import (
 	"context"
@@ -18,6 +18,14 @@ type Instance struct {
 	DBName         string
 	ColName        string
 	TemplateObject interface{}
+}
+
+func (m *Instance) ApplyDatabase(db *mongo.Database) *Instance {
+	m.db = db
+	m.coll = db.Collection(m.ColName)
+	m.DBName = db.Name()
+
+	return m
 }
 
 func (m *Instance) NewObject() interface{} {
@@ -43,7 +51,7 @@ func (m *Instance) ConvertToBson(ent interface{}) (bson.M, error) {
 	}
 
 	obj := bson.M{}
-	bson.Unmarshal(sel, &obj)
+	_ = bson.Unmarshal(sel, &obj)
 
 	return obj, nil
 }
@@ -60,7 +68,7 @@ func (m *Instance) ConvertToObject(b bson.M) (interface{}, error) {
 		return nil, err
 	}
 
-	bson.Unmarshal(bytes, obj)
+	_ = bson.Unmarshal(bytes, obj)
 	return obj, nil
 }
 
@@ -182,7 +190,7 @@ func (m *Instance) Query(query interface{}, offset, limit int64, sortFields *bso
 
 	list := m.NewList(int(limit))
 	err = result.All(context.TODO(), &list)
-	result.Close(context.TODO())
+	_ = result.Close(context.TODO())
 	if err != nil || reflect.ValueOf(list).Len() == 0 {
 		return nil, err
 	}
@@ -201,8 +209,8 @@ func (m *Instance) QueryAll() (interface{}, error) {
 	}
 
 	list := m.NewList(1000)
-	rs.All(context.TODO(), &list)
-	rs.Close(context.TODO())
+	_ = rs.All(context.TODO(), &list)
+	_ = rs.Close(context.TODO())
 	if reflect.ValueOf(list).Len() == 0 {
 		return nil, fmt.Errorf("Not found any matched " + m.ColName + ".")
 	}
